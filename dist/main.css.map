@@ -1,0 +1,1 @@
+{"version":3,"file":"main.css","mappings":"AAAA,KACI,SACA,UAEA,sB","sources":["webpack://webpack-demo/./src/scss/_main.scss"],"sourcesContent":["body{\r\n    margin: 0;\r\n    padding: 0;\r\n\r\n    background-color: black;\r\n}"],"names":[],"sourceRoot":""}

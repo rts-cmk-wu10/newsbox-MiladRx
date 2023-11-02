@@ -1,0 +1,1 @@
+{"version":3,"file":"main.js","mappings":"mBAEAA,QAAQC,IAAI,c","sources":["webpack://webpack-demo/./src/index.js"],"sourcesContent":["import './style.scss';\r\n\r\nconsole.log('hello world');"],"names":["console","log"],"sourceRoot":""}
