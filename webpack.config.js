@@ -5,26 +5,23 @@ const path = require("path")
 
 module.exports = {
 
-	
-	  
 	//mode: process.env.environment == "production" ? "production" : "development",
 	mode: "production",
 	plugins: [new MiniCssExtractPlugin(), new HtmlWebpackPlugin({
 		template: path.resolve(__dirname, "src", "index.html")
 	}),
 	new HtmlWebpackPlugin({
-		template: path.resolve(__dirname, "src", "index.html"),
-		filename: "index.html"
+		template: path.resolve(__dirname, "src", "settings.html"),
+		filename: "settings.html"
 	})]
 	,
-
 	module: {
 		rules: [
 			{
 				test: /\.(s[ac]|c)ss$/i,
 				//test: path.resolve(__dirname, "src/scss/*"),
 				use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader", "postcss-loader"]
-			},{
+			}, {
 				test: /\.(png|jpe?g)$/i,
 				type: "asset",
 				use: [
@@ -47,9 +44,9 @@ module.exports = {
 					options: {
 						encodeOptions: {
 							jpeg: {
-                // https://sharp.pixelplumbing.com/api-output#jpeg
-                quality: 20,
-              },
+								// https://sharp.pixelplumbing.com/api-output#jpeg
+								quality: 20,
+							},
 							png: {
 								quality: 20,
 								compressionLevel: 9
