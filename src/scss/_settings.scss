@@ -1,48 +1,76 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-    margin: 0;
-    padding: 0;
+$primary-color: #fff;
+$border-color: #e0e0e0;
+$search-bg: #f1f1f1;
+$sage: #87BCBF;
+$rust: #E55934;
+$drab: #324755;
+$danger: #D95454;
+$onyx: #1B1C20;
+$slate: #6E8CA0;
+$snow: #FFFFFF;
+$ice: #F0F3F4;
+$fossil: #C8D1D3;
+$sand: #B9B0A2;
+
+.settings{
+   
+   
 }
 
 .settings-container {
-    width: 300px;
-    margin: 40px auto;
     padding: 20px;
-    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
+    background-color: #F0F3F4;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 
-    header {
-        font-size: 24px;
-        margin-bottom: 30px;
+
+    .whitebox {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        margin-bottom: 20px;
     }
 
-    h2 {
-        font-size: 24px;
+    .title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-bottom: 20px;
         text-align: center;
+
+        h2{
+            font-size: 24px;
+          color: #898989;
+        }
+
+        .manage {
+            color: $sage;
+           text-align: center;
+            font-size: 40px;
+        }
     }
 
-    hr {
-        margin: 20px 0;
-        border: none;
-        border-top: 1px solid #e0e0e0;
-    }
 
     .category {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 10px 0;
+        font-weight: bold;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 18px;
+        padding: 0px 0 40px 0;
+
+        span {
+            color: $drab;
+        }
 
         .switch {
             position: relative;
             display: inline-block;
             width: 60px;
             height: 34px;
-            
+
             input {
                 display: none;
             }
@@ -71,9 +99,9 @@ body {
                 }
             }
 
-            input:checked + .slider {
-                background-color: #2196F3;
-                
+            input:checked+.slider {
+                background-color: $sage;
+
                 &:before {
                     transform: translateX(26px);
                 }
