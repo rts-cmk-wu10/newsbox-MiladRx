@@ -14,14 +14,27 @@ $sand: #B9B0A2;
 
 
 
+
 .news-category {
     h2 {
         display: flex;
-        justify-content: space-between;
         align-items: center;
         cursor: pointer;
         color: #324755;
         font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        padding: 20px;
+    }
+
+    .menuIcon {
+        max-width: 40px;
+    }
+
+    .dropdown-icon-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 120px;
+        /* Add margin to create space between text and dropdown icon */
     }
 
     .icon,
@@ -30,6 +43,7 @@ $sand: #B9B0A2;
         background: none;
         border: none;
         cursor: pointer;
+
     }
 
     .dropdown-icon {
@@ -46,9 +60,6 @@ nav {
     align-items: center;
     padding: 30px 20px;
     border-bottom: 1px solid $border-color;
-
-   
-
 }
 
 ul {
@@ -95,9 +106,15 @@ ul {
     border-bottom: 1px solid $border-color;
 
     &.expanded {
+
+        h2 {
+            border-bottom: 1px solid #e0e0e0;
+        }
+
         .articles {
             display: block;
             max-height: 500px;
+
         }
 
         .dropdown-icon {
@@ -111,15 +128,17 @@ ul {
         overflow: hidden;
         transition: max-height 0.4s ease;
 
+
         article {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
 
             img {
                 width: 60px;
                 height: 50px;
-                object-fit:cover;
+                object-fit: cover;
                 border-radius: 100%;
                 margin-right: 12px;
             }
@@ -129,7 +148,7 @@ ul {
 
                 h3 {
                     font-size: 1.2rem;
-                    
+
                     color: #324755;
                     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
                 }
