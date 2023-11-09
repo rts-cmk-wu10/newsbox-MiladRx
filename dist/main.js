@@ -1,44 +1,60 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
-var __webpack_exports__ = {};
+/******/ 	var __webpack_modules__ = ({
 
-;// CONCATENATED MODULE: ./src/scripts/dropdownmenu.js
-/* harmony default export */ var dropdownmenu = ((function () {
+/***/ 879:
+/***/ (function() {
 
-    document.addEventListener('DOMContentLoaded', function () {
-      // Select all dropdown headers and icon buttons
-      const dropdownHeaders = document.querySelectorAll('.dropdown h2');
-      const dropdownIconButtons = document.querySelectorAll('.dropdown-icon-btn');
-  
-      // Toggle function for the articles
-      function toggleArticles(dropdownContainer) {
-        // Toggle the 'expanded' class on the '.dropdown' container
-        dropdownContainer.classList.toggle('expanded');
-      }
-  
-      // Attach the event listener to each header
-      dropdownHeaders.forEach(header => {
-        header.addEventListener('click', function(event) {
-          // Find the closest parent container with class '.dropdown'
-          const dropdownContainer = event.target.closest('.dropdown');
-          toggleArticles(dropdownContainer);
-        });
-      });
-  
-      // Attach the event listener to each dropdown button
-      dropdownIconButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-          event.stopPropagation(); // Prevent the event from bubbling up to the header
-          // Find the closest parent container with class '.dropdown'
-          const dropdownContainer = event.target.closest('.dropdown');
-          toggleArticles(dropdownContainer);
-        });
-      });
-  
+// Wait for the DOM to fully load
+document.addEventListener('DOMContentLoaded', function () {
+  // Get all the dropdown headers
+  const dropdownHeaders = document.querySelectorAll('.news-category.dropdown');
+
+  // Attach the event listener to each header
+  dropdownHeaders.forEach(dropdownHeader => {
+    dropdownHeader.addEventListener('click', function() {
+      // Toggle the 'expanded' class on the '.articles' container of this dropdown
+      this.classList.toggle('expanded');
     });
-  
-  })());
-  
+  });
+});
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+
+// EXTERNAL MODULE: ./src/scripts/dropdownmenu.js
+var dropdownmenu = __webpack_require__(879);
 ;// CONCATENATED MODULE: ./src/scripts/setting.js
 /* harmony default export */ var setting = ((function () {
 
@@ -49,6 +65,7 @@ var __webpack_exports__ = {};
 
 
 
+}();
 /******/ })()
 ;
 //# sourceMappingURL=main.js.map
