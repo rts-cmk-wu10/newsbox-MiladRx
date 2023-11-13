@@ -1,8 +1,25 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Heebo', sans-serif;
 }
 
 
 
+$primary-color: #fff;
+$border-color: #e0e0e0;
+$search-bg: #f1f1f1;
+$sage: #87BCBF;
+$rust: #E55934;
+$drab: #324755;
+$danger: #D95454;
+$onyx: #1B1C20;
+$slate: #6E8CA0;
+$snow: #FFFFFF;
+$ice: #F0F3F4;
+$fossil: #C8D1D3;
+$sand: #B9B0A2;

@@ -1,16 +1,5 @@
-$primary-color: #fff;
-$border-color: #e0e0e0;
-$search-bg: #f1f1f1;
-$sage: #87BCBF;
-$rust: #E55934;
-$drab: #324755;
-$danger: #D95454;
-$onyx: #1B1C20;
-$slate: #6E8CA0;
-$snow: #FFFFFF;
-$ice: #F0F3F4;
-$fossil: #C8D1D3;
-$sand: #B9B0A2;
+@import './_reset.scss';
+
 
 
 header {
@@ -78,7 +67,9 @@ header {
 
 .news-category {
 
-    .whitebox {
+
+
+    .box {
         padding: 15px;
         border-bottom: 1px solid $border-color;
     }
@@ -94,14 +85,14 @@ header {
         width: 35px;
         border-radius: 50%;
         margin-right: 10px;
-        box-shadow: 0px 0px 33px 19px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.1);
 
     }
 
     .text {
         cursor: pointer;
         color: #324755;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
+
         font-weight: bold;
         font-size: 17px;
     }
@@ -147,12 +138,12 @@ header {
             h3 {
                 font-size: 1.2rem;
                 color: #324755;
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
             }
 
             p {
                 margin-top: 5px;
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
                 color: #6E8CA0;
             }
         }

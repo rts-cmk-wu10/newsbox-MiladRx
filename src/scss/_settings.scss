@@ -1,27 +1,12 @@
-$primary-color: #fff;
-$border-color: #e0e0e0;
-$search-bg: #f1f1f1;
-$sage: #87BCBF;
-$rust: #E55934;
-$drab: #324755;
-$danger: #D95454;
-$onyx: #1B1C20;
-$slate: #6E8CA0;
-$snow: #FFFFFF;
-$ice: #F0F3F4;
-$fossil: #C8D1D3;
-$sand: #B9B0A2;
+@import './_reset.scss';
 
-.settings{
-   
-   
-}
+
 
 .settings-container {
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #F0F3F4;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 
 
     .whitebox {
@@ -38,14 +23,14 @@ $sand: #B9B0A2;
         margin-bottom: 20px;
         text-align: center;
 
-        h2{
+        h2 {
             font-size: 24px;
-          color: #898989;
+            color: #898989;
         }
 
         .manage {
             color: $sage;
-           text-align: center;
+            text-align: center;
             font-size: 40px;
         }
     }
@@ -57,7 +42,6 @@ $sand: #B9B0A2;
         align-items: center;
         margin: 10px 0;
         font-weight: bold;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         font-size: 18px;
         padding: 0px 0 40px 0;
 
@@ -114,4 +98,3 @@ $sand: #B9B0A2;
         text-align: center;
     }
 }
-
