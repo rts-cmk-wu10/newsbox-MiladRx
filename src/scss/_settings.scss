@@ -98,3 +98,45 @@
         text-align: center;
     }
 }
+
+.flexButton {
+    display: flex;
+    justify-content: center;
+    margin: 40px;
+}
+
+
+.darkmodebtn {
+    background-color: #f0f3f4;
+    color: #000000;
+    padding: 10px;
+    border-radius: 30px;
+    margin: 10px;
+  }
+
+.darkmodebtn {
+    
+    padding: 10px;
+    border-radius: 30px;
+    margin: 10px;
+}
+
+body {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+}
+
+body.darkmode {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+}
+
+.settings-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.whitebox {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

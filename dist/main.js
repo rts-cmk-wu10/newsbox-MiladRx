@@ -19,6 +19,22 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+/***/ }),
+
+/***/ 736:
+/***/ (function() {
+
+document.addEventListener('DOMContentLoaded', function() {
+    const darkmodeBtn = document.querySelector('.darkmodebtn');
+    const container = document.querySelector('.flexButton');
+  
+    darkmodeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('darkmode');
+      container.classList.toggle('darkmode');
+      darkmodeBtn.textContent = document.body.classList.contains('darkmode') ? 'TOGGLE LIGHT MODE' : 'TOGGLE DARK MODE';
+    });
+  });
+
 /***/ })
 
 /******/ 	});
@@ -103,6 +119,8 @@ window.addEventListener('load', updateHeadlinesAndDescriptions);
 })());
 // EXTERNAL MODULE: ./src/scripts/dropdownmenu.js
 var dropdownmenu = __webpack_require__(879);
+// EXTERNAL MODULE: ./src/scripts/tester.js
+var tester = __webpack_require__(736);
 ;// CONCATENATED MODULE: ./src/index.js
 
 
