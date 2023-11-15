@@ -1,21 +1,65 @@
 @import './_reset.scss';
 
+.articles article {
+    transition: transform 0.4s ease;
+    /* Other styles */
+}
 
+.article-container {
+    position: relative;
+    overflow: hidden;
+    /* Ensure parts of the button outside the container are not visible */
+}
+
+article {
+    position: relative;
+    z-index: 2;
+    /* Ensure the article is above the button */
+    /* Other article styles */
+}
+
+.archive-button {
+    position: absolute;
+    right: 0;
+
+    transform: translateX(100%);
+    z-index: 1;
+
+    /* Button styling */
+    padding: 95px 47px;
+    /* Adjust padding for size */
+    max-width: 200px;
+    /* Set the maximum width */
+    white-space: nowrap;
+    /* Prevent text from wrapping */
+    overflow: hidden;
+    /* Hide overflow if the text exceeds max-width */
+    text-overflow: ellipsis;
+    /* Show ellipsis (...) if text overflows */
+    font-size: 16px;
+    /* Adjust font size */
+    background-color: #87BCBF;
+    /* Background color */
+    color: #ffffff;
+    /* Text color */
+    border: none;
+    /* Remove border */
+    cursor: pointer;
+}
 
 header {
 
     nav {
 
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        align-items: center;
+       
         padding: 30px 20px;
         border-bottom: 1px solid $border-color;
 
         ul {
             display: flex;
             list-style: none;
+            max-width: 100%;
+            justify-content: center;
 
             li {
                 margin: 0 50px;
@@ -68,7 +112,6 @@ header {
 .news-category {
 
 
-
     .box {
         padding: 15px;
         border-bottom: 1px solid $border-color;
@@ -87,6 +130,7 @@ header {
         margin-right: 10px;
         box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.1);
 
+
     }
 
     .text {
@@ -104,18 +148,21 @@ header {
     }
 
     .articles {
+
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.7s, opacity 0.3s; // This applies to both expanding and collapsing
         opacity: 1;
+
     }
 
     &.expanded .articles {
         max-height: 500px; // Or however tall the content needs to be
 
     }
-    
+
     article {
+
         display: flex;
         align-items: center;
         padding: 1rem;

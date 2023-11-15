@@ -121,22 +121,3 @@
     margin: 10px;
 }
 
-body {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-}
-
-body.darkmode {
-  --bg-color: #000000;
-  --text-color: #ffffff;
-}
-
-.settings-container {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.whitebox {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}

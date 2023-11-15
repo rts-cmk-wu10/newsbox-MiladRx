@@ -4,16 +4,41 @@
 /***/ 879:
 /***/ (function() {
 
-// Wait for the DOM to fully load
 document.addEventListener('DOMContentLoaded', function () {
-  // Get all the dropdown headers
   const dropdownHeaders = document.querySelectorAll('.news-category.dropdown');
 
-  // Attach the event listener to each header
   dropdownHeaders.forEach(dropdownHeader => {
-    dropdownHeader.addEventListener('click', function() {
-      // Toggle the 'expanded' class on the '.articles' container of this dropdown
+    dropdownHeader.addEventListener('click', function (event) {
+      // Prevents the event from affecting parent elements
+      event.stopPropagation();
+
+      // Toggle the 'expanded' class on the clicked dropdown
       this.classList.toggle('expanded');
+
+      // Optional: Close other dropdowns when one is opened
+      dropdownHeaders.forEach(otherHeader => {
+        if (otherHeader !== this) {
+          otherHeader.classList.remove('expanded');
+        }
+      });
+    });
+  });
+
+  // Optional: Clicking anywhere outside of the dropdowns will close them
+  document.addEventListener('click', function () {
+    dropdownHeaders.forEach(dropdownHeader => {
+      dropdownHeader.classList.remove('expanded');
+    });
+  });
+
+  // New: Ensure that elements inside the articles are clickable
+  document.querySelectorAll('.news-category.dropdown .articles *').forEach(element => {
+    element.addEventListener('click', function (event) {
+      // This allows interaction with the element
+      console.log('Element clicked:', this);
+
+      // Stop the event from closing the dropdown
+      event.stopPropagation();
     });
   });
 });
@@ -25,15 +50,45 @@ document.addEventListener('DOMContentLoaded', function () {
 /***/ (function() {
 
 document.addEventListener('DOMContentLoaded', function() {
-    const darkmodeBtn = document.querySelector('.darkmodebtn');
-    const container = document.querySelector('.flexButton');
-  
-    darkmodeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('darkmode');
-      container.classList.toggle('darkmode');
-      darkmodeBtn.textContent = document.body.classList.contains('darkmode') ? 'TOGGLE LIGHT MODE' : 'TOGGLE DARK MODE';
+    var articleContainers = document.querySelectorAll('.article-container');
+    var maxDragDistance = -110; // Maximum left drag distance
+    var startX, currentX;
+    var isDragging = false;
+
+    articleContainers.forEach(function(container) {
+        var article = container.querySelector('article');
+        var archiveButton = container.querySelector('.archive-button');
+
+        article.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        article.addEventListener('touchmove', function(e) {
+            if (isDragging) {
+                currentX = e.touches[0].clientX;
+                var distance = currentX - startX;
+                if (distance <= 0 && distance > maxDragDistance) {
+                    this.style.transform = `translateX(${distance}px)`;
+                    archiveButton.style.opacity = (Math.abs(distance) / Math.abs(maxDragDistance)).toString();
+                }
+            }
+        });
+
+        article.addEventListener('touchend', function(e) {
+            isDragging = false;
+            var totalDragDistance = currentX - startX;
+            if (totalDragDistance <= maxDragDistance) {
+                this.style.transform = `translateX(${maxDragDistance}px)`;
+                archiveButton.style.opacity = '1';
+            } else {
+                this.style.transform = '';
+                archiveButton.style.opacity = '1';
+            }
+        });
     });
-  });
+});
+
 
 /***/ })
 
