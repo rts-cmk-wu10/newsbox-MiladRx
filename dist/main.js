@@ -46,6 +46,93 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ 956:
+/***/ (function() {
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all the archive buttons
+    const archiveButtons = document.querySelectorAll('.archive-button');
+
+    // Function to handle the archive button click event
+    function handleArchiveButtonClick(event) {
+        const articleContainer = event.target.closest('.article-container');
+        const articleHTML = articleContainer.outerHTML;
+
+        // Retrieve existing archived articles from local storage
+        const archivedArticles = localStorage.getItem('archivedArticles') || '';
+
+        // Append the new article HTML to the existing archived articles, separated by a newline
+        const updatedArchivedArticles = archivedArticles + articleHTML + '\n';
+
+        // Store the updated archived articles in local storage
+        localStorage.setItem('archivedArticles', updatedArchivedArticles);
+
+        // Replace the class of the clicked archive button
+        const archiveButtonIcon = event.target.querySelector('.inbox2');
+        archiveButtonIcon.classList.remove('fa-inbox');
+        archiveButtonIcon.classList.add('fa-trash');
+
+        alert('Article archived successfully!');
+    }
+
+    // Add event listener to each archive button
+    archiveButtons.forEach(function(button) {
+        button.addEventListener('click', handleArchiveButtonClick);
+    });
+
+    // Retrieve archived articles from local storage
+    const archivedArticles = localStorage.getItem('archivedArticles');
+
+    // Check if there are any archived articles
+    if (archivedArticles) {
+        // Get the archived articles container
+        const archivedArticlesContainer = document.getElementById('archived-articles-container');
+
+        // Set the innerHTML of the container to the archived articles
+        archivedArticlesContainer.innerHTML = archivedArticles;
+    }
+});
+
+/***/ }),
+
+/***/ 463:
+/***/ (function() {
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Retrieve archived articles from local storage
+    const archivedArticles = localStorage.getItem('archivedArticles');
+
+    // Check if there are any archived articles
+    if (archivedArticles) {
+        // Get the archived articles container
+        const archivedArticlesContainer = document.getElementById('archived-articles-container');
+
+        // Set the innerHTML of the container to the archived articles
+        archivedArticlesContainer.innerHTML = archivedArticles;
+    }
+});
+
+/***/ }),
+
+/***/ 657:
+/***/ (function() {
+
+const descriptionElement = document.querySelector('.description');
+const maxTextLength = 50; // Maximum length of the shortened text
+
+const originalText = descriptionElement.textContent.trim();
+let shortenedText = originalText;
+
+if (shortenedText.length > maxTextLength) {
+    shortenedText = shortenedText.substring(0, maxTextLength).trim() + '...';
+}
+
+descriptionElement.textContent = shortenedText;
+
+
+
+/***/ }),
+
 /***/ 736:
 /***/ (function() {
 
@@ -176,7 +263,16 @@ window.addEventListener('load', updateHeadlinesAndDescriptions);
 var dropdownmenu = __webpack_require__(879);
 // EXTERNAL MODULE: ./src/scripts/tester.js
 var tester = __webpack_require__(736);
+// EXTERNAL MODULE: ./src/scripts/shortparagraph.js
+var shortparagraph = __webpack_require__(657);
+// EXTERNAL MODULE: ./src/scripts/dummy1.js
+var dummy1 = __webpack_require__(956);
+// EXTERNAL MODULE: ./src/scripts/dummy2.js
+var dummy2 = __webpack_require__(463);
 ;// CONCATENATED MODULE: ./src/index.js
+
+
+
 
 
 
