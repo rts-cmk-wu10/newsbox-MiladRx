@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+setTimeout(function() {
     var articleContainers = document.querySelectorAll('.article-container');
     var maxDragDistance = -110; // Maximum left drag distance
     var startX, currentX;
@@ -36,4 +36,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+},);

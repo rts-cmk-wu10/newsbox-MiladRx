@@ -1,6 +1,88 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 117:
+/***/ (function() {
+
+// Archive button click event listener
+document.querySelectorAll('.archive-button').forEach(function(button) {
+    button.addEventListener('click', function() {
+      // Get the article container
+      const articleContainer = this.parentNode;
+  
+      // Get the article HTML
+      const articleHTML = articleContainer.outerHTML;
+  
+      // Get the data-category
+      const dataCategory = articleContainer.closest('section').dataset.category;
+  
+      // Retrieve the existing archived articles from local storage
+      const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+  
+      // Create an array for the data-category if it doesn't exist
+      if (!archivedArticles[dataCategory]) {
+        archivedArticles[dataCategory] = [];
+      }
+  
+      // Store the article HTML in the corresponding data-category array
+      archivedArticles[dataCategory].push(articleHTML);
+  
+      // Store the updated object in local storage
+      localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+  
+      // Remove the article container from the DOM
+      articleContainer.remove();
+  
+      // Move the archived articles to the corresponding archive sections
+      moveArchivedArticles();
+  
+      // Print the HTML of the archive sections to archive.html
+      printHTMLToFile();
+    });
+  });
+  
+  // Move archived articles to corresponding archive sections
+  function moveArchivedArticles() {
+    // Retrieve the archived articles from local storage
+    const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+  
+    // Loop through each data-category
+    for (const dataCategory in archivedArticles) {
+      // Get the corresponding archive section
+      const archiveSection = document.querySelector(`${dataCategory}-ARCHIVE`);
+  
+      // Get the array of archived articles for the data-category
+      const articles = archivedArticles[dataCategory];
+  
+      // Loop through the archived articles
+      articles.forEach(function(articleHTML) {
+        // Create a temporary element to hold the article HTML
+        const tempElement = document.createElement('div');
+        tempElement.innerHTML = articleHTML;
+  
+        // Modify the data-category of the article container
+        const articleContainer = tempElement.querySelector('.article-container');
+        articleContainer.setAttribute('data-category', `${dataCategory}-ARCHIVE`);
+  
+        // Append the article container to the archive section
+        archiveSection.appendChild(articleContainer);
+      });
+  
+      // Clear the array of archived articles for the data-category
+      archivedArticles[dataCategory] = [];
+    }
+  
+    // Store the updated object in local storage
+    localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+  }
+  
+  
+  
+  // Call the function to move the archived articles
+  moveArchivedArticles();
+
+/***/ }),
+
 /***/ 879:
 /***/ (function() {
 
@@ -46,56 +128,105 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
-/***/ 956:
+/***/ 198:
 /***/ (function() {
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Get all the archive buttons
-    const archiveButtons = document.querySelectorAll('.archive-button');
+// Define the API endpoints for each category
+const apiEndpoints = {
+  WORLD: 'https://api.nytimes.com/svc/topstories/v2/world.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s',
+  US: 'https://api.nytimes.com/svc/topstories/v2/us.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s',
+  SCIENCE: 'https://api.nytimes.com/svc/topstories/v2/science.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s',
+  HOME: 'https://api.nytimes.com/svc/topstories/v2/home.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s',
+  ARTS: 'https://api.nytimes.com/svc/topstories/v2/arts.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s'
+};
 
-    // Function to handle the archive button click event
-    function handleArchiveButtonClick(event) {
-        const articleContainer = event.target.closest('.article-container');
-        const articleHTML = articleContainer.outerHTML;
+// Fetch data and generate articles for each category
+for (const category in apiEndpoints) {
+  fetch(apiEndpoints[category])
+    .then(response => response.json())
+    .then(data => {
+      const articles = data.results.slice(0, 10); // Limit the articles to 10
 
-        // Retrieve existing archived articles from local storage
-        const archivedArticles = localStorage.getItem('archivedArticles') || '';
+      // Get the section container based on the category
+      const section = document.querySelector(`section[data-category="${category}"]`);
 
-        // Append the new article HTML to the existing archived articles, separated by a newline
-        const updatedArchivedArticles = archivedArticles + articleHTML + '\n';
+      // Loop through the articles
+      articles.forEach(article => {
+        // Create the article container
+        const articleContainer = document.createElement('div');
+        articleContainer.classList.add('article-container');
 
-        // Store the updated archived articles in local storage
-        localStorage.setItem('archivedArticles', updatedArchivedArticles);
+        // Create the article element
+        const articleElement = document.createElement('article');
 
-        // Replace the class of the clicked archive button
-        const archiveButtonIcon = event.target.querySelector('.inbox2');
-        archiveButtonIcon.classList.remove('fa-inbox');
-        archiveButtonIcon.classList.add('fa-trash');
+        // Create the image element
+        const imageElement = document.createElement('img');
+        imageElement.classList.add('articleImage');
+        imageElement.src = article.multimedia[0]?.url || ''; // Use optional chaining to handle missing multimedia
+        imageElement.alt = 'Description of Image';
 
-        alert('Article archived successfully!');
-    }
+        // Create the content container
+        const contentContainer = document.createElement('div');
+        contentContainer.classList.add('content');
 
-    // Add event listener to each archive button
-    archiveButtons.forEach(function(button) {
-        button.addEventListener('click', handleArchiveButtonClick);
+        // Create the headline element
+        const headlineElement = document.createElement('h3');
+        headlineElement.classList.add('headline');
+        headlineElement.textContent = article.title || '';
+
+        // Create the description element
+        const descriptionElement = document.createElement('p');
+        descriptionElement.classList.add('description');
+        descriptionElement.textContent = article.abstract || '';
+
+        // Create the archive button
+        const archiveButton = document.createElement('div');
+        archiveButton.classList.add('archive-button');
+        const archiveButtonIcon = document.createElement('i');
+        archiveButtonIcon.classList.add('fa-solid', 'fa-inbox', 'inbox2');
+        archiveButtonIcon.style.color = '#ffffff';
+        archiveButton.appendChild(archiveButtonIcon);
+
+        // Append elements to the article container
+        contentContainer.appendChild(headlineElement);
+        contentContainer.appendChild(descriptionElement);
+        articleElement.appendChild(imageElement);
+        articleElement.appendChild(contentContainer);
+        articleElement.appendChild(archiveButton);
+        articleContainer.appendChild(articleElement);
+
+        // Append the article container to the section
+        section.appendChild(articleContainer);
+      });
+    })
+
+    .catch(error => {
+      console.error('Error:', error);
     });
+}
 
-    // Retrieve archived articles from local storage
-    const archivedArticles = localStorage.getItem('archivedArticles');
+// Create script elements for each script
+const script1 = document.createElement('script');
+script1.src = '/src/scripts/swipefunction.js';
 
-    // Check if there are any archived articles
-    if (archivedArticles) {
-        // Get the archived articles container
-        const archivedArticlesContainer = document.getElementById('archived-articles-container');
+const script2 = document.createElement('script');
+script2.src = '/src/scripts/archive.js';
 
-        // Set the innerHTML of the container to the archived articles
-        archivedArticlesContainer.innerHTML = archivedArticles;
-    }
-});
+const script3 = document.createElement('script');
+script3.src = '/src/scripts/script3.js';
+
+// Append the script elements to the head of the document
+document.head.appendChild(script1);
+document.head.appendChild(script2);
+document.head.appendChild(script3);
+
+
+
+
 
 /***/ }),
 
-/***/ 463:
+/***/ 73:
 /***/ (function() {
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -133,10 +264,10 @@ descriptionElement.textContent = shortenedText;
 
 /***/ }),
 
-/***/ 736:
+/***/ 627:
 /***/ (function() {
 
-document.addEventListener('DOMContentLoaded', function() {
+setTimeout(function() {
     var articleContainers = document.querySelectorAll('.article-container');
     var maxDragDistance = -110; // Maximum left drag distance
     var startX, currentX;
@@ -174,8 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
-
+},);
 
 /***/ })
 
@@ -206,70 +336,52 @@ document.addEventListener('DOMContentLoaded', function() {
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 !function() {
 "use strict";
-
-;// CONCATENATED MODULE: ./src/scripts/app.js
-// Function to fetch data from the API and update headlines and descriptions
-async function updateHeadlinesAndDescriptions() {
-  try {
-      const apiKey = "F7Q16NruiZVUiGVH934NpdQgCBkkIz2s";
-      const apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
-      
-      // Fetch data from the API
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      // Check if data was fetched successfully
-      if (response.ok && data.results) {
-          // Loop through the articles and update headlines and descriptions
-          const articles = document.querySelectorAll('.news-category .headline');
-          const descriptions = document.querySelectorAll('.news-category .description');
-          
-          for (let i = 0; i < articles.length; i++) {
-              const article = articles[i];
-              const description = descriptions[i];
-              
-              // Update headline
-              article.textContent = data.results[i]?.title || "No Title Available";
-              
-              // Update description
-              description.textContent = data.results[i]?.abstract || "No Description Available";
-          }
-      } else {
-          console.error("Error fetching data from API");
-      }
-  } catch (error) {
-      console.error("An error occurred:", error);
-  }
-}
-
-// Call the function to update headlines and descriptions when the page loads
-window.addEventListener('load', updateHeadlinesAndDescriptions);
-
-
-/* harmony default export */ var app = ((function () {
-  fetch('https://api.nytimes.com/svc/topstories/v2/home.json?api-key=F7Q16NruiZVUiGVH934NpdQgCBkkIz2s')
-    .then(response => response.json())
-    .then(data => {
-
-      console.log(data);
-
-    });
-})());
-// EXTERNAL MODULE: ./src/scripts/dropdownmenu.js
-var dropdownmenu = __webpack_require__(879);
-// EXTERNAL MODULE: ./src/scripts/tester.js
-var tester = __webpack_require__(736);
-// EXTERNAL MODULE: ./src/scripts/shortparagraph.js
-var shortparagraph = __webpack_require__(657);
-// EXTERNAL MODULE: ./src/scripts/dummy1.js
-var dummy1 = __webpack_require__(956);
-// EXTERNAL MODULE: ./src/scripts/dummy2.js
-var dummy2 = __webpack_require__(463);
-;// CONCATENATED MODULE: ./src/index.js
+/* harmony import */ var _scripts_fetch_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(198);
+/* harmony import */ var _scripts_fetch_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_scripts_fetch_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _scripts_swipefunction_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(627);
+/* harmony import */ var _scripts_swipefunction_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_scripts_swipefunction_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(879);
+/* harmony import */ var _scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(657);
+/* harmony import */ var _scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(73);
+/* harmony import */ var _scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(117);
+/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_scripts_archive_js__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
