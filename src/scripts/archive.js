@@ -1,76 +1,60 @@
-// Archive button click event listener
-document.querySelectorAll('.archive-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      // Get the article container
-      const articleContainer = this.parentNode;
-  
-      // Get the article HTML
-      const articleHTML = articleContainer.outerHTML;
-  
-      // Get the data-category
-      const dataCategory = articleContainer.closest('section').dataset.category;
-  
-      // Retrieve the existing archived articles from local storage
-      const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  
-      // Create an array for the data-category if it doesn't exist
-      if (!archivedArticles[dataCategory]) {
-        archivedArticles[dataCategory] = [];
-      }
-  
-      // Store the article HTML in the corresponding data-category array
-      archivedArticles[dataCategory].push(articleHTML);
-  
-      // Store the updated object in local storage
-      localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
-  
-      // Remove the article container from the DOM
-      articleContainer.remove();
-  
-      // Move the archived articles to the corresponding archive sections
-      moveArchivedArticles();
-  
-      // Print the HTML of the archive sections to archive.html
-      printHTMLToFile();
-    });
-  });
-  
-  // Move archived articles to corresponding archive sections
-  function moveArchivedArticles() {
-    // Retrieve the archived articles from local storage
-    const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  
-    // Loop through each data-category
-    for (const dataCategory in archivedArticles) {
-      // Get the corresponding archive section
-      const archiveSection = document.querySelector(`${dataCategory}-ARCHIVE`);
-  
-      // Get the array of archived articles for the data-category
-      const articles = archivedArticles[dataCategory];
-  
-      // Loop through the archived articles
-      articles.forEach(function(articleHTML) {
-        // Create a temporary element to hold the article HTML
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = articleHTML;
-  
-        // Modify the data-category of the article container
-        const articleContainer = tempElement.querySelector('.article-container');
-        articleContainer.setAttribute('data-category', `${dataCategory}-ARCHIVE`);
-  
-        // Append the article container to the archive section
-        archiveSection.appendChild(articleContainer);
-      });
-  
-      // Clear the array of archived articles for the data-category
+document.querySelectorAll('.archive-button').forEach(function (button) {
+  button.addEventListener('click', function () {
+    const articleContainer = this.parentNode;
+    const articleHTML = articleContainer.outerHTML;
+    const dataCategory = articleContainer.closest('section').dataset.category;
+    let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+
+    if (!archivedArticles[dataCategory]) {
       archivedArticles[dataCategory] = [];
     }
-  
-    // Store the updated object in local storage
+
+    archivedArticles[dataCategory].push(articleHTML);
     localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+
+    articleContainer.remove();
+    moveArchivedArticles();
+    printHTMLToFile();
+  });
+});
+
+function moveArchivedArticles() {
+  let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+
+  for (const dataCategory in archivedArticles) {
+    const articles = archivedArticles[dataCategory];
+    const targetSection = document.querySelector(`section[data-category="${dataCategory}-ARCHIVE"]`);
+    targetSection.innerHTML = '';
+
+    articles.forEach(function (articleHTML) {
+      const articleElement = document.createElement('article');
+      articleElement.innerHTML = articleHTML;
+      targetSection.appendChild(articleElement);
+    });
+
+    archivedArticles[dataCategory] = [];
   }
-  
-  
-  
-  // Call the function to move the archived articles
-  moveArchivedArticles();
+
+  localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+}
+
+function printHTMLToFile() {
+  const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+  let archiveHTML = '';
+
+  for (const dataCategory in archivedArticles) {
+    const articles = archivedArticles[dataCategory];
+    let sectionHTML = '';
+
+    articles.forEach(function (articleHTML) {
+      sectionHTML += articleHTML;
+    });
+
+    archiveHTML += `<section data-category="${dataCategory}-ARCHIVE">${sectionHTML}</section>`;
+  }
+
+
+}
+
+moveArchivedArticles();
+printHTMLToFile();

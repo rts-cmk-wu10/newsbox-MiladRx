@@ -67,9 +67,7 @@ for (const category in apiEndpoints) {
       });
     })
 
-    .catch(error => {
-      console.error('Error:', error);
-    });
+   
 }
 
 // Create script elements for each script
@@ -85,7 +83,6 @@ script3.src = '/src/scripts/script3.js';
 // Append the script elements to the head of the document
 document.head.appendChild(script1);
 document.head.appendChild(script2);
-document.head.appendChild(script3);
 
 
 

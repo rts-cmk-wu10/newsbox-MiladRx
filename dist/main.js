@@ -4,82 +4,66 @@
 /***/ 117:
 /***/ (function() {
 
-// Archive button click event listener
-document.querySelectorAll('.archive-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      // Get the article container
-      const articleContainer = this.parentNode;
-  
-      // Get the article HTML
-      const articleHTML = articleContainer.outerHTML;
-  
-      // Get the data-category
-      const dataCategory = articleContainer.closest('section').dataset.category;
-  
-      // Retrieve the existing archived articles from local storage
-      const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  
-      // Create an array for the data-category if it doesn't exist
-      if (!archivedArticles[dataCategory]) {
-        archivedArticles[dataCategory] = [];
-      }
-  
-      // Store the article HTML in the corresponding data-category array
-      archivedArticles[dataCategory].push(articleHTML);
-  
-      // Store the updated object in local storage
-      localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
-  
-      // Remove the article container from the DOM
-      articleContainer.remove();
-  
-      // Move the archived articles to the corresponding archive sections
-      moveArchivedArticles();
-  
-      // Print the HTML of the archive sections to archive.html
-      printHTMLToFile();
-    });
-  });
-  
-  // Move archived articles to corresponding archive sections
-  function moveArchivedArticles() {
-    // Retrieve the archived articles from local storage
-    const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  
-    // Loop through each data-category
-    for (const dataCategory in archivedArticles) {
-      // Get the corresponding archive section
-      const archiveSection = document.querySelector(`${dataCategory}-ARCHIVE`);
-  
-      // Get the array of archived articles for the data-category
-      const articles = archivedArticles[dataCategory];
-  
-      // Loop through the archived articles
-      articles.forEach(function(articleHTML) {
-        // Create a temporary element to hold the article HTML
-        const tempElement = document.createElement('div');
-        tempElement.innerHTML = articleHTML;
-  
-        // Modify the data-category of the article container
-        const articleContainer = tempElement.querySelector('.article-container');
-        articleContainer.setAttribute('data-category', `${dataCategory}-ARCHIVE`);
-  
-        // Append the article container to the archive section
-        archiveSection.appendChild(articleContainer);
-      });
-  
-      // Clear the array of archived articles for the data-category
+document.querySelectorAll('.archive-button').forEach(function (button) {
+  button.addEventListener('click', function () {
+    const articleContainer = this.parentNode;
+    const articleHTML = articleContainer.outerHTML;
+    const dataCategory = articleContainer.closest('section').dataset.category;
+    let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+
+    if (!archivedArticles[dataCategory]) {
       archivedArticles[dataCategory] = [];
     }
-  
-    // Store the updated object in local storage
+
+    archivedArticles[dataCategory].push(articleHTML);
     localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+
+    articleContainer.remove();
+    moveArchivedArticles();
+    printHTMLToFile();
+  });
+});
+
+function moveArchivedArticles() {
+  let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+
+  for (const dataCategory in archivedArticles) {
+    const articles = archivedArticles[dataCategory];
+    const targetSection = document.querySelector(`section[data-category="${dataCategory}-ARCHIVE"]`);
+    targetSection.innerHTML = '';
+
+    articles.forEach(function (articleHTML) {
+      const articleElement = document.createElement('article');
+      articleElement.innerHTML = articleHTML;
+      targetSection.appendChild(articleElement);
+    });
+
+    archivedArticles[dataCategory] = [];
   }
-  
-  
-  
-  // Call the function to move the archived articles
-  moveArchivedArticles();
+
+  localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+}
+
+function printHTMLToFile() {
+  const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+  let archiveHTML = '';
+
+  for (const dataCategory in archivedArticles) {
+    const articles = archivedArticles[dataCategory];
+    let sectionHTML = '';
+
+    articles.forEach(function (articleHTML) {
+      sectionHTML += articleHTML;
+    });
+
+    archiveHTML += `<section data-category="${dataCategory}-ARCHIVE">${sectionHTML}</section>`;
+  }
+
+
+}
+
+moveArchivedArticles();
+printHTMLToFile();
 
 /***/ }),
 
@@ -200,9 +184,7 @@ for (const category in apiEndpoints) {
       });
     })
 
-    .catch(error => {
-      console.error('Error:', error);
-    });
+   
 }
 
 // Create script elements for each script
@@ -218,47 +200,8 @@ script3.src = '/src/scripts/script3.js';
 // Append the script elements to the head of the document
 document.head.appendChild(script1);
 document.head.appendChild(script2);
-document.head.appendChild(script3);
 
 
-
-
-
-/***/ }),
-
-/***/ 73:
-/***/ (function() {
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Retrieve archived articles from local storage
-    const archivedArticles = localStorage.getItem('archivedArticles');
-
-    // Check if there are any archived articles
-    if (archivedArticles) {
-        // Get the archived articles container
-        const archivedArticlesContainer = document.getElementById('archived-articles-container');
-
-        // Set the innerHTML of the container to the archived articles
-        archivedArticlesContainer.innerHTML = archivedArticles;
-    }
-});
-
-/***/ }),
-
-/***/ 657:
-/***/ (function() {
-
-const descriptionElement = document.querySelector('.description');
-const maxTextLength = 50; // Maximum length of the shortened text
-
-const originalText = descriptionElement.textContent.trim();
-let shortenedText = originalText;
-
-if (shortenedText.length > maxTextLength) {
-    shortenedText = shortenedText.substring(0, maxTextLength).trim() + '...';
-}
-
-descriptionElement.textContent = shortenedText;
 
 
 
@@ -376,12 +319,8 @@ var __webpack_exports__ = {};
 /* harmony import */ var _scripts_swipefunction_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_scripts_swipefunction_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(879);
 /* harmony import */ var _scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(657);
-/* harmony import */ var _scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scripts_shortparagraph_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(73);
-/* harmony import */ var _scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_scripts_retrieve_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(117);
-/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_scripts_archive_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(117);
+/* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scripts_archive_js__WEBPACK_IMPORTED_MODULE_3__);
 
 
 
