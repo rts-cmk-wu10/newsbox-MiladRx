@@ -4,11 +4,15 @@
 /***/ 117:
 /***/ (function() {
 
+document.addEventListener('DOMContentLoaded', function () {
+  moveArchivedArticles();
+});
+
 document.querySelectorAll('.archive-button').forEach(function (button) {
   button.addEventListener('click', function () {
     const articleContainer = this.parentNode;
-    const articleHTML = articleContainer.outerHTML;
-    const dataCategory = articleContainer.closest('section').dataset.category;
+    const articleHTML = removeTransformStyle(articleContainer.outerHTML);
+    const dataCategory = articleContainer.closest('.news-category').querySelector('.text').innerText;
     let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
 
     if (!archivedArticles[dataCategory]) {
@@ -20,7 +24,6 @@ document.querySelectorAll('.archive-button').forEach(function (button) {
 
     articleContainer.remove();
     moveArchivedArticles();
-    printHTMLToFile();
   });
 });
 
@@ -29,14 +32,9 @@ function moveArchivedArticles() {
 
   for (const dataCategory in archivedArticles) {
     const articles = archivedArticles[dataCategory];
-    const targetSection = document.querySelector(`section[data-category="${dataCategory}-ARCHIVE"]`);
-    targetSection.innerHTML = '';
+    const targetSection = document.querySelector(`#${dataCategory}-ARCHIVE`);
 
-    articles.forEach(function (articleHTML) {
-      const articleElement = document.createElement('article');
-      articleElement.innerHTML = articleHTML;
-      targetSection.appendChild(articleElement);
-    });
+    targetSection.innerHTML = articles.join('');
 
     archivedArticles[dataCategory] = [];
   }
@@ -44,26 +42,49 @@ function moveArchivedArticles() {
   localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
 }
 
-function printHTMLToFile() {
-  const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  let archiveHTML = '';
+function removeTransformStyle(articleHTML) {
+  const div = document.createElement('div');
+  div.classList.add('article-container');
+  div.innerHTML = articleHTML;
+  const article = div.querySelector('article');
 
-  for (const dataCategory in archivedArticles) {
-    const articles = archivedArticles[dataCategory];
-    let sectionHTML = '';
+  if (article) {
+    article.removeAttribute('style');
 
-    articles.forEach(function (articleHTML) {
-      sectionHTML += articleHTML;
-    });
+    const archiveButton = article.querySelector('.archive-button');
+    if (archiveButton) {
+      archiveButton.classList.remove('archive-button');
+      archiveButton.classList.add('delete-button');
+      archiveButton.innerHTML = '<i class="fa-solid fa-trash inbox2" style="color: rgb(255, 255, 255);"></i>';
+    }
 
-    archiveHTML += `<section data-category="${dataCategory}-ARCHIVE">${sectionHTML}</section>`;
+    return div.outerHTML;
   }
 
-
+  return articleHTML;
 }
 
-moveArchivedArticles();
-printHTMLToFile();
+/***/ }),
+
+/***/ 805:
+/***/ (function() {
+
+const darkModeButton = document.querySelector('.darkmodebtn');
+const darkModeState = localStorage.getItem('darkModeState');
+
+if (darkModeState === 'enabled') {
+  document.body.classList.add('dark-mode');
+}
+
+darkModeButton.addEventListener('click', function () {
+  if (document.body.classList.contains('dark-mode')) {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('darkModeState', 'disabled');
+  } else {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('darkModeState', 'enabled');
+  }
+});
 
 /***/ }),
 
@@ -74,41 +95,29 @@ document.addEventListener('DOMContentLoaded', function () {
   const dropdownHeaders = document.querySelectorAll('.news-category.dropdown');
 
   dropdownHeaders.forEach(dropdownHeader => {
-    dropdownHeader.addEventListener('click', function (event) {
+    const dropdownContent = dropdownHeader.querySelector('.dropdown-content');
+    const dropdownArrow = dropdownHeader.querySelector('.box');
+
+    dropdownArrow.addEventListener('click', function (event) {
       // Prevents the event from affecting parent elements
       event.stopPropagation();
 
-      // Toggle the 'expanded' class on the clicked dropdown
-      this.classList.toggle('expanded');
+      // Toggle the 'expanded' class on the dropdown header
+      dropdownHeader.classList.toggle('expanded');
 
-      // Optional: Close other dropdowns when one is opened
-      dropdownHeaders.forEach(otherHeader => {
-        if (otherHeader !== this) {
-          otherHeader.classList.remove('expanded');
-        }
-      });
+      // Toggle the 'hidden' class on the dropdown content
+      dropdownContent.classList.toggle('hidden');
     });
-  });
 
-  // Optional: Clicking anywhere outside of the dropdowns will close them
-  document.addEventListener('click', function () {
-    dropdownHeaders.forEach(dropdownHeader => {
-      dropdownHeader.classList.remove('expanded');
-    });
-  });
-
-  // New: Ensure that elements inside the articles are clickable
-  document.querySelectorAll('.news-category.dropdown .articles *').forEach(element => {
-    element.addEventListener('click', function (event) {
-      // This allows interaction with the element
-      console.log('Element clicked:', this);
-
-      // Stop the event from closing the dropdown
-      event.stopPropagation();
+    // Close the dropdown when clicking outside of it
+    document.addEventListener('click', function (event) {
+      if (!dropdownHeader.contains(event.target)) {
+        dropdownHeader.classList.remove('expanded');
+        dropdownContent.classList.add('hidden');
+      }
     });
   });
 });
-
 
 /***/ }),
 
@@ -210,45 +219,49 @@ document.head.appendChild(script2);
 /***/ 627:
 /***/ (function() {
 
-setTimeout(function() {
-    var articleContainers = document.querySelectorAll('.article-container');
-    var maxDragDistance = -110; // Maximum left drag distance
-    var startX, currentX;
-    var isDragging = false;
+var articleContainers = document.querySelectorAll('.article-container');
+var maxDragDistance = -110; // Maximum left drag distance
+var startX, currentX;
+var isDragging = false;
 
-    articleContainers.forEach(function(container) {
-        var article = container.querySelector('article');
-        var archiveButton = container.querySelector('.archive-button');
+articleContainers.forEach(function(container) {
+  var article = container.querySelector('article');
+  var archiveButton = container.querySelector('.archive-button');
+  
+  article.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
 
-        article.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            isDragging = true;
-        });
+  article.addEventListener('touchmove', function(e) {
+    if (isDragging) {
+      currentX = e.touches[0].clientX;
+      var distance = currentX - startX;
+      if (distance <= 0 && distance > maxDragDistance) {
+        this.style.transform = `translateX(${distance}px)`;
+        if (archiveButton) {
+          archiveButton.style.opacity = (Math.abs(distance) / Math.abs(maxDragDistance)).toString();
+        }
+      }
+    }
+  });
 
-        article.addEventListener('touchmove', function(e) {
-            if (isDragging) {
-                currentX = e.touches[0].clientX;
-                var distance = currentX - startX;
-                if (distance <= 0 && distance > maxDragDistance) {
-                    this.style.transform = `translateX(${distance}px)`;
-                    archiveButton.style.opacity = (Math.abs(distance) / Math.abs(maxDragDistance)).toString();
-                }
-            }
-        });
-
-        article.addEventListener('touchend', function(e) {
-            isDragging = false;
-            var totalDragDistance = currentX - startX;
-            if (totalDragDistance <= maxDragDistance) {
-                this.style.transform = `translateX(${maxDragDistance}px)`;
-                archiveButton.style.opacity = '1';
-            } else {
-                this.style.transform = '';
-                archiveButton.style.opacity = '1';
-            }
-        });
-    });
-},);
+  article.addEventListener('touchend', function(e) {
+    isDragging = false;
+    var totalDragDistance = currentX - startX;
+    if (totalDragDistance <= maxDragDistance) {
+      this.style.transform = `translateX(${maxDragDistance}px)`;
+      if (archiveButton) {
+        archiveButton.style.opacity = '1';
+      }
+    } else {
+      this.style.transform = '';
+      if (archiveButton) {
+        archiveButton.style.opacity = '1';
+      }
+    }
+  });
+});
 
 /***/ })
 
@@ -321,6 +334,9 @@ var __webpack_exports__ = {};
 /* harmony import */ var _scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_scripts_dropdownmenu_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(117);
 /* harmony import */ var _scripts_archive_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_scripts_archive_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _scripts_darkmode_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(805);
+/* harmony import */ var _scripts_darkmode_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_scripts_darkmode_js__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 

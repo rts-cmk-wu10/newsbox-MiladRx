@@ -7,7 +7,10 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #F0F3F4;
 
+    .category span {
 
+        text-transform: uppercase;
+    }
 
     .whitebox {
         background-color: #fff;
@@ -105,19 +108,17 @@
     margin: 40px;
 }
 
+.dark-mode .darkmodebtn {
+    border: none;
+    border: 1px solid #2c3c48;
+}
 
 .darkmodebtn {
-    background-color: #f0f3f4;
+    background-color: white;
     color: #000000;
     padding: 10px;
     border-radius: 30px;
     margin: 10px;
-  }
-
-.darkmodebtn {
-    
-    padding: 10px;
-    border-radius: 30px;
-    margin: 10px;
+    border-style: none;
+    border: 1px solid #354958;
 }
-

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/5f15ab74b5.js" crossorigin="anonymous"></script>
-    <script src="scripts/archive.js"></script>
+
     <title>Archived Articles</title>
 </head>
 
@@ -24,7 +24,7 @@
         </div>
     </header>
 
-    <div class="news-category dropdown">
+    <div class="news-category dropdown" id="WORLD-TOGGLE">
 
         <section class="box">
             <div class="logo-container">
@@ -32,17 +32,14 @@
                 <span class="text">WORLD</span>
                 <div class="dropdown-arrow"><i class="fa-solid fa-chevron-down"></i></div>
             </div>
+
         </section>
 
-        <section class="articles" data-category="WORLD-ARCHIVE"></section>
-        <section class="articles" data-category="US-ARCHIVE"></section>
-        <section class="articles" data-category="SCIENCE-ARCHIVE"></section>
-        <section class="articles" data-category="HOME-ARCHIVE"></section>
-        <section class="articles" data-category="ARTS-ARCHIVE"></section>
+        <section id="WORLD-ARCHIVE" class="articles">
 
     </div>
 
-    <div class="news-category dropdown">
+    <div class="news-category dropdown" id="US-TOGGLE">
 
         <section class="box">
             <div class="logo-container">
@@ -53,13 +50,13 @@
 
         </section>
 
-        <section id="us-archive" class="articles" data-category="US-ARCHIVE">
+        <section id="US-ARCHIVE" class="articles">
 
         </section>
 
     </div>
 
-    <div class="news-category dropdown">
+    <div class="news-category dropdown" id="SCIENCE-TOGGLE">
 
         <section class="box">
             <div class="logo-container">
@@ -69,13 +66,13 @@
             </div>
         </section>
 
-        <section id="science-archive" class="articles" data-category="SCIENCE-ARCHIVE">
+        <section id="SCIENCE-ARCHIVE" class="articles">
 
         </section>
 
     </div>
 
-    <div class="news-category dropdown">
+    <div class="news-category dropdown" id="HOME-TOGGLE">
 
         <section class="box">
             <div class="logo-container">
@@ -85,13 +82,13 @@
             </div>
         </section>
 
-        <section id="home-archive" class="articles" data-category="HOME-ARCHIVE">
+        <section id="HOME-ARCHIVE" class="articles">
 
         </section>
 
     </div>
 
-    <div class="news-category dropdown">
+    <div class="news-category dropdown" id="ARTS-TOGGLE">
 
         <section class="box">
             <div class="logo-container">
@@ -101,7 +98,7 @@
             </div>
         </section>
 
-        <section id="arts-archive" class="articles" data-category="ARTS-ARCHIVE">
+        <section id="ARTS-ARCHIVE" class="articles">
 
         </section>
 

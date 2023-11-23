@@ -1,8 +1,12 @@
+document.addEventListener('DOMContentLoaded', function () {
+  moveArchivedArticles();
+});
+
 document.querySelectorAll('.archive-button').forEach(function (button) {
   button.addEventListener('click', function () {
     const articleContainer = this.parentNode;
-    const articleHTML = articleContainer.outerHTML;
-    const dataCategory = articleContainer.closest('section').dataset.category;
+    const articleHTML = removeTransformStyle(articleContainer.outerHTML);
+    const dataCategory = articleContainer.closest('.news-category').querySelector('.text').innerText;
     let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
 
     if (!archivedArticles[dataCategory]) {
@@ -14,7 +18,6 @@ document.querySelectorAll('.archive-button').forEach(function (button) {
 
     articleContainer.remove();
     moveArchivedArticles();
-    printHTMLToFile();
   });
 });
 
@@ -23,14 +26,9 @@ function moveArchivedArticles() {
 
   for (const dataCategory in archivedArticles) {
     const articles = archivedArticles[dataCategory];
-    const targetSection = document.querySelector(`section[data-category="${dataCategory}-ARCHIVE"]`);
-    targetSection.innerHTML = '';
+    const targetSection = document.querySelector(`#${dataCategory}-ARCHIVE`);
 
-    articles.forEach(function (articleHTML) {
-      const articleElement = document.createElement('article');
-      articleElement.innerHTML = articleHTML;
-      targetSection.appendChild(articleElement);
-    });
+    targetSection.innerHTML = articles.join('');
 
     archivedArticles[dataCategory] = [];
   }
@@ -38,23 +36,24 @@ function moveArchivedArticles() {
   localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
 }
 
-function printHTMLToFile() {
-  const archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
-  let archiveHTML = '';
+function removeTransformStyle(articleHTML) {
+  const div = document.createElement('div');
+  div.classList.add('article-container');
+  div.innerHTML = articleHTML;
+  const article = div.querySelector('article');
 
-  for (const dataCategory in archivedArticles) {
-    const articles = archivedArticles[dataCategory];
-    let sectionHTML = '';
+  if (article) {
+    article.removeAttribute('style');
 
-    articles.forEach(function (articleHTML) {
-      sectionHTML += articleHTML;
-    });
+    const archiveButton = article.querySelector('.archive-button');
+    if (archiveButton) {
+      archiveButton.classList.remove('archive-button');
+      archiveButton.classList.add('delete-button');
+      archiveButton.innerHTML = '<i class="fa-solid fa-trash inbox2" style="color: rgb(255, 255, 255);"></i>';
+    }
 
-    archiveHTML += `<section data-category="${dataCategory}-ARCHIVE">${sectionHTML}</section>`;
+    return div.outerHTML;
   }
 
-
+  return articleHTML;
 }
-
-moveArchivedArticles();
-printHTMLToFile();
