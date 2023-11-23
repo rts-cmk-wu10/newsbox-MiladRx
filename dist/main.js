@@ -196,21 +196,14 @@ for (const category in apiEndpoints) {
    
 }
 
-
 const script1 = document.createElement('script');
-script1.src = '/src/scripts/swipefunction.js';
+script1.src = './scripts/swipefunction.js';
 
 const script2 = document.createElement('script');
-script2.src = '/src/scripts/archive.js';
-
-
-
+script2.src = './scripts/archive.js';
 
 document.head.appendChild(script1);
 document.head.appendChild(script2);
-
-
-
 
 
 /***/ }),
