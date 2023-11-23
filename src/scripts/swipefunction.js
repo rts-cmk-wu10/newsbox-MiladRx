@@ -1,5 +1,5 @@
 var articleContainers = document.querySelectorAll('.article-container');
-var maxDragDistance = -110; // Maximum left drag distance
+var maxDragDistance = -110; // Maximum trække distance for a swipe
 var startX, currentX;
 var isDragging = false;
 
