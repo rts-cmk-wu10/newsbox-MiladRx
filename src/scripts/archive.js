@@ -1,50 +1,44 @@
-// Initialize archiving functionality
-export function initializeArchiving() {
-  document.addEventListener('DOMContentLoaded', function () {
-    // When the DOM is loaded, move archived articles
+// ARKIVERE virker ikke når jeg prøver på Netlify. men virker når jeg prøver på npm run build watch
+
+document.addEventListener('DOMContentLoaded', function () {
+  moveArchivedArticles();
+});
+
+document.querySelectorAll('.archive-button').forEach(function (button) {
+  button.addEventListener('click', function () {
+    const articleContainer = this.parentNode;
+    const articleHTML = removeTransformStyle(articleContainer.outerHTML);
+    const dataCategory = articleContainer.closest('.news-category').querySelector('.text').innerText;
+    let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
+
+    if (!archivedArticles[dataCategory]) {
+      archivedArticles[dataCategory] = [];
+    }
+
+    archivedArticles[dataCategory].push(articleHTML);
+    localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
+
+    articleContainer.remove();
     moveArchivedArticles();
   });
+});
 
-  // Add click event listeners to all elements with the class 'archive-button'
-  document.querySelectorAll('.archive-button').forEach(function (button) {
-    button.addEventListener('click', function () {
-      const articleContainer = this.parentNode; // Get the parent container of the clicked button
-      const articleHTML = removeTransformStyle(articleContainer.outerHTML); // Get HTML content and clean it up
-      const dataCategory = articleContainer.closest('.news-category').querySelector('.text').innerText; // Get the data category
-      let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {}; // Retrieve archived articles from local storage
-
-      if (!archivedArticles[dataCategory]) {
-        archivedArticles[dataCategory] = [];
-      }
-
-      // Add the current article HTML to the corresponding data category
-      archivedArticles[dataCategory].push(articleHTML);
-      localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles)); // Update local storage
-
-      articleContainer.remove(); // Remove the article container from the DOM
-      moveArchivedArticles(); // Move archived articles to their corresponding sections
-    });
-  });
-}
-
-// Move archived articles to their corresponding sections
-export function moveArchivedArticles() {
-  let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {}; // Retrieve archived articles from local storage
+function moveArchivedArticles() {
+  let archivedArticles = JSON.parse(localStorage.getItem('archivedArticles')) || {};
 
   for (const dataCategory in archivedArticles) {
     const articles = archivedArticles[dataCategory];
-    const targetSection = document.querySelector(`#${dataCategory}-ARCHIVE`); // Get the target section in the DOM
+    const targetSection = document.querySelector(`#${dataCategory}-ARCHIVE`);
 
-    targetSection.innerHTML = articles.join(''); // Update the target section with the joined HTML content of archived articles
+    targetSection.innerHTML = articles.join('');
 
-    archivedArticles[dataCategory] = []; // Clear the array of archived articles for the current data category
+    archivedArticles[dataCategory] = [];
   }
 
-  localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles)); // Update local storage with the cleared archived articles
+  localStorage.setItem('archivedArticles', JSON.stringify(archivedArticles));
 }
 
-// Remove transformation styles from article HTML
-export function removeTransformStyle(articleHTML) {
+function removeTransformStyle(articleHTML) {
   const div = document.createElement('div');
   div.classList.add('article-container');
   div.innerHTML = articleHTML;
