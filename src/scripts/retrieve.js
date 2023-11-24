@@ -5,5 +5,5 @@ setTimeout(function() {
 
 function showError() {
    
-    alert("ARKIVERE og SWIPE virker ikke når jeg prøver på Netlify. men virker når jeg prøver på npm run build watch");
+    alert("Når jeg forsøger at bruge Netlify, fungerer ARKIVERE og SWIPE funktionen ikke som forventet. De fungerer korrekt, når jeg kører  npm run build watch. Desuden indlæses mine liste ikoner ikke af en ukendt årsag.");
 }
